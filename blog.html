@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — CozyhomeDesigns</title>
+  <meta name="description" content="All home decor reviews, furniture finds, outdoor patio picks, and home office recommendations from CozyhomeDesigns.">
+  <link rel="canonical" href="https://cozyhomedesigns.github.io/blog.html">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">Cozy<span>Home</span>Designs</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="blog.html" class="active">Blog</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<div style="background:white; padding:40px 24px 32px; border-bottom:1px solid var(--border);">
+  <div style="max-width:1200px; margin:0 auto;">
+    <h1 style="font-family:'Playfair Display',serif; font-size:2rem; color:var(--brown-dark); margin-bottom:6px;">All Reviews</h1>
+    <p style="color:var(--text-muted);">Honest, research-backed home decor picks from Amazon</p>
+  </div>
+</div>
+
+<div class="categories-bar">
+  <div class="categories-inner">
+    <a href="#" class="cat-btn active" data-cat="all">All Posts</a>
+    <a href="#" class="cat-btn" data-cat="luxury_furniture">🛋 Furniture</a>
+    <a href="#" class="cat-btn" data-cat="outdoor_patio">🌿 Outdoor & Patio</a>
+    <a href="#" class="cat-btn" data-cat="home_office">💼 Home Office</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="posts-grid" id="posts-container">
+    <p style="color:var(--text-muted); text-align:center; grid-column:1/-1;">Loading posts...</p>
+  </div>
+</div>
+
+<footer>
+  <strong>CozyhomeDesigns</strong><br>
+  <a href="about.html">About</a> · <a href="about.html#disclosure">Affiliate Disclosure</a><br><br>
+  CozyhomeDesigns is a participant in the Amazon Services LLC Associates Program.<br>
+  © 2025 CozyhomeDesigns. All rights reserved.
+</footer>
+
+<script>
+let allPosts = [];
+let activeCategory = 'all';
+
+// Read URL param
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('cat')) activeCategory = urlParams.get('cat');
+
+fetch('posts.json')
+  .then(r => r.json())
+  .then(posts => {
+    allPosts = posts;
+    renderPosts();
+  })
+  .catch(() => {
+    document.getElementById('posts-container').innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;">No posts yet. Check back soon!</p>';
+  });
+
+function renderPosts() {
+  const filtered = activeCategory === 'all' ? allPosts : allPosts.filter(p => p.category === activeCategory);
+  const container = document.getElementById('posts-container');
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.cat === activeCategory);
+  });
+  if (!filtered.length) {
+    container.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;">No posts in this category yet.</p>';
+    return;
+  }
+  container.innerHTML = filtered.map(p => `
+    <a href="posts/${p.slug}.html" class="post-card">
+      <div class="post-card-img">${catEmoji(p.category)}</div>
+      <div class="post-card-body">
+        <div class="post-category">${catLabel(p.category)}</div>
+        <h3>${p.title}</h3>
+        <p>${p.excerpt}</p>
+        <div class="post-meta">
+          <span>${p.date}</span>
+          <span class="read-more">Read Review →</span>
+        </div>
+      </div>
+    </a>
+  `).join('');
+}
+
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    activeCategory = btn.dataset.cat;
+    renderPosts();
+  });
+});
+
+function catEmoji(cat) {
+  return { luxury_furniture:'🛋', outdoor_patio:'🌿', home_office:'💼' }[cat] || '🏠';
+}
+function catLabel(cat) {
+  return { luxury_furniture:'Furniture', outdoor_patio:'Outdoor & Patio', home_office:'Home Office' }[cat] || 'Home Decor';
+}
+</script>
+</body>
+</html>
