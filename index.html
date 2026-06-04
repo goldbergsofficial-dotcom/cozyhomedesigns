@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CozyhomeDesigns — Home Decor Inspiration & Amazon Finds</title>
+  <meta name="description" content="Discover the best home decor, furniture, and outdoor living finds on Amazon. Expert reviews, styling tips, and curated picks for a cozy, beautiful home.">
+  <meta property="og:title" content="CozyhomeDesigns — Home Decor Inspiration & Amazon Finds">
+  <meta property="og:description" content="Curated home decor finds, furniture reviews, and outdoor living inspiration.">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://cozyhomedesigns.github.io/">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">Cozy<span>Home</span>Designs</a>
+    <nav>
+      <a href="index.html" class="active">Home</a>
+      <a href="blog.html">Blog</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">✦ Curated Amazon Finds</div>
+  <h1>Transform Your Home Into a Sanctuary</h1>
+  <p>Expert picks, honest reviews, and styling inspiration for every room — all found on Amazon.</p>
+  <a href="blog.html" class="hero-cta">Browse All Reviews →</a>
+</section>
+
+<!-- CATEGORIES -->
+<div class="categories-bar">
+  <div class="categories-inner">
+    <a href="blog.html" class="cat-btn active">All Posts</a>
+    <a href="blog.html?cat=luxury_furniture" class="cat-btn">🛋 Furniture</a>
+    <a href="blog.html?cat=outdoor_patio" class="cat-btn">🌿 Outdoor & Patio</a>
+    <a href="blog.html?cat=home_office" class="cat-btn">💼 Home Office</a>
+  </div>
+</div>
+
+<!-- FEATURED POSTS -->
+<div class="container">
+  <div class="section-header">
+    <h2>Latest Reviews</h2>
+    <p>Fresh picks updated weekly</p>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="posts-grid" id="posts-container">
+    <!-- Posts are loaded dynamically from posts.json -->
+    <p style="color:var(--text-muted); text-align:center; grid-column:1/-1;">Loading posts...</p>
+  </div>
+</div>
+
+<!-- WHY TRUST US -->
+<section style="background:white; padding:60px 24px; text-align:center;">
+  <div style="max-width:900px; margin:0 auto;">
+    <div class="section-header">
+      <h2>Why Trust Our Reviews?</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:32px; margin-top:40px;">
+      <div>
+        <div style="font-size:2.5rem; margin-bottom:12px;">⭐</div>
+        <h3 style="font-family:'Playfair Display',serif; margin-bottom:8px; color:var(--brown-dark);">Real Ratings</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted);">We only feature products with 4.4+ stars and 500+ verified reviews.</p>
+      </div>
+      <div>
+        <div style="font-size:2.5rem; margin-bottom:12px;">🔍</div>
+        <h3 style="font-family:'Playfair Display',serif; margin-bottom:8px; color:var(--brown-dark);">Deep Research</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted);">Each product is researched for quality, durability, and value before we write about it.</p>
+      </div>
+      <div>
+        <div style="font-size:2.5rem; margin-bottom:12px;">💰</div>
+        <h3 style="font-family:'Playfair Display',serif; margin-bottom:8px; color:var(--brown-dark);">Best Value</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted);">We compare alternatives so you always get the most for your budget.</p>
+      </div>
+      <div>
+        <div style="font-size:2.5rem; margin-bottom:12px;">🚀</div>
+        <h3 style="font-family:'Playfair Display',serif; margin-bottom:8px; color:var(--brown-dark);">Prime Eligible</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted);">All featured products are Prime eligible — fast, reliable delivery guaranteed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-strip">
+  <h2>Get Weekly Home Decor Picks</h2>
+  <p>New finds, seasonal trends, and exclusive deals — straight to your inbox.</p>
+  <form class="newsletter-form" onsubmit="return false;">
+    <input type="email" placeholder="your@email.com">
+    <button type="submit">Subscribe Free</button>
+  </form>
+</section>
+
+<footer>
+  <strong>CozyhomeDesigns</strong><br>
+  <a href="about.html">About</a> · <a href="about.html#disclosure">Affiliate Disclosure</a> · <a href="blog.html">Blog</a><br><br>
+  CozyhomeDesigns is a participant in the Amazon Services LLC Associates Program,<br>
+  an affiliate advertising program designed to provide a means for sites to earn advertising fees<br>
+  by advertising and linking to Amazon.com.<br><br>
+  © 2025 CozyhomeDesigns. All rights reserved.
+</footer>
+
+<script>
+// Load posts from posts.json
+fetch('posts.json')
+  .then(r => r.json())
+  .then(posts => {
+    const container = document.getElementById('posts-container');
+    const latest = posts.slice(0, 6);
+    if (!latest.length) {
+      container.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;">No posts yet. Check back soon!</p>';
+      return;
+    }
+    container.innerHTML = latest.map(p => `
+      <a href="posts/${p.slug}.html" class="post-card">
+        <div class="post-card-img">${categoryEmoji(p.category)}</div>
+        <div class="post-card-body">
+          <div class="post-category">${categoryLabel(p.category)}</div>
+          <h3>${p.title}</h3>
+          <p>${p.excerpt}</p>
+          <div class="post-meta">
+            <span>${p.date}</span>
+            <span class="read-more">Read Review →</span>
+          </div>
+        </div>
+      </a>
+    `).join('');
+  })
+  .catch(() => {
+    document.getElementById('posts-container').innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;">No posts yet. Check back soon!</p>';
+  });
+
+function categoryEmoji(cat) {
+  const map = { luxury_furniture: '🛋', outdoor_patio: '🌿', home_office: '💼' };
+  return map[cat] || '🏠';
+}
+function categoryLabel(cat) {
+  const map = { luxury_furniture: 'Furniture', outdoor_patio: 'Outdoor & Patio', home_office: 'Home Office' };
+  return map[cat] || 'Home Decor';
+}
+</script>
+</body>
+</html>
