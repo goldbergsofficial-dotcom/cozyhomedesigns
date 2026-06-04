@@ -120,7 +120,10 @@ fetch('posts.json')
     }
     container.innerHTML = latest.map(p => `
       <a href="posts/${p.slug}.html" class="post-card">
-        <div class="post-card-img">${categoryEmoji(p.category)}</div>
+        ${p.image_url
+          ? `<img class="post-card-img" src="${p.image_url}" alt="${p.title}" style="object-fit:cover;" loading="lazy">`
+          : `<div class="post-card-img">${categoryEmoji(p.category)}</div>`
+        }
         <div class="post-card-body">
           <div class="post-category">${categoryLabel(p.category)}</div>
           <h3>${p.title}</h3>
